@@ -8,6 +8,12 @@ A Paginator class for managing embeds with pagination. It allows users to naviga
 - `author` (int, optional): The ID of the author who can interact with the buttons. If not specified, anyone can interact with the Paginator buttons.
 - `timeout` (float, optional): How long the Paginator should timeout, in seconds, after the last interaction.
 
+## How to Install
+```
+python setup.py build
+python setup.py install
+```
+
 ## Usage
 
 To use the `Paginator` class, follow these steps:
