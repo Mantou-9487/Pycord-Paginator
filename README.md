@@ -29,11 +29,9 @@ To use the `Paginator` class, follow these steps:
 
 1. Create a list of embeds that you want to paginate.
 2. Instantiate the `Paginator` class, passing the list of embeds as the `embeds` parameter.
-3. Optionally, specify the `author` parameter to restrict interaction with the buttons to a specific user.
-4. Optionally, specify the `timeout` parameter to set a timeout value for the Paginator.
-5. Add the Paginator to view using the `view=Paginator(pages, ctx.author.id, None)` method.
+3. Use await Paginator().start method.
 
-## Example
+## Basic Example
 
 ```python
 from discord import ApplicationContext, SlashCommandGroup, Embed
