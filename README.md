@@ -4,9 +4,18 @@ A Paginator class for managing embeds with pagination. It allows users to naviga
 
 ## Parameters
 
-- `embeds` (List[Embed]): List of embeds which are in the Paginator. The Paginator starts from the first embed.
-- `author` (int, optional): The ID of the author who can interact with the buttons. If not specified, anyone can interact with the Paginator buttons.
-- `timeout` (float, optional): How long the Paginator should timeout, in seconds, after the last interaction.
+- `timeout` (int): How long the Paginator should timeout in, after the last interaction. (In seconds) (Overrides default of 60)
+- `previous_button` (disnake.ui.Button, optional): Overrides default previous button.
+- `next_button` (disnake.ui.Button, optional): Overrides default next button.
+- `trash_button` (disnake.ui.Button, optional): Overrides default trash button.
+- `page_counter_separator` (str, optional): The custom separator between the pages numbers in the page_counter button.
+- `page_counter_style` (disnake.ButtonStyle, optional): Overrides default page counter style.
+- `initial_page` (int, optional): Page to start the pagination on.
+- `on_timeout_message` (Optional[str], optional): Overrides default `on_timeout` string set as embed footer. If `None`, no message will appear `on_timeout`.
+- `interaction_check` (bool, optional): Check whether the users interacting with the paginator are the owner of the command or not. Default set to `True`.
+- `interaction_check_message` (Union[disnake.Embed, str], optional): The message to send when an `interaction_check` fails, e.g., a user who is not the command owner attempted to interact with the paginator. This feature can be disabled by setting `interaction_check` to `False`.
+- `ephemeral` (bool, optional): Whether the paginator should only be visible to the command invocator or to anyone else.
+- `persistent` (bool, optional): Whether the paginator should persist across multiple sessions.
 
 ## How to Install
 ```
@@ -27,18 +36,35 @@ To use the `Paginator` class, follow these steps:
 ## Example
 
 ```python
-from paginator import Paginator
+from discord import ApplicationContext, SlashCommandGroup, Embed
 from discord.ext import commands
-from discord import Embed
 
-@commands.slash_command(name="paginator", description="test")
-async def pg(self, ctx):
-    embed1 = Embed(title="1")
-    embed2 = Embed(title="1")
-    embed3 = Embed(title="1")
-    # Create a list of embeds
-    pages = [embed1, embed2, embed3]
-    # Add the Paginator to a send_message
-    await ctx.interaction.send_message(embed=pages[0], view=Paginator(pages, ctx.author.id, None))
+from core.paginator import Paginator
+
+class Page(commands.Cog):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+        super().__init__()
+
+    page = SlashCommandGroup("page", "pages")
+
+    @page.command(name="test")
+    async def test(self, ctx:ApplicationContext):
+        
+        embeds = [
+            Embed(
+                title="First embed"
+            ),
+            Embed(
+                title="Second embed"
+            ),
+            Embed(
+                title="Third embed"
+            ),
+        ]
+        await Paginator().start(ctx, pages=embeds)
+
+def setup(bot):
+    bot.add_cog(Page(bot))
     
 ```
